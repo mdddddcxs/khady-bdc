@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pour Toi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');
+      
+      body {
+        font-family: 'Montserrat', sans-serif;
+      }
+      
+      .font-handwriting {
+        font-family: 'Dancing Script', cursive;
+      }
+
+      @keyframes float {
+        0% { transform: translateY(0px); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+      }
+
+      .heart-particle {
+        position: absolute;
+        animation: float 4s linear infinite;
+      }
+
+      /* Shine Animation */
+      @keyframes shine {
+        to {
+          background-position: 200% center;
+        }
+      }
+      
+      .animate-shine {
+        background: linear-gradient(
+          to right,
+          #9ca3af 20%,
+          #ffffff 50%,
+          #9ca3af 80%
+        );
+        background-size: 200% auto;
+        color: #000;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 3s linear infinite;
+        font-weight: 700;
+      }
+
+      /* Multi-color Sparkle Animation */
+      @keyframes rainbow-sparkle {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 200% 50%; }
+      }
+
+      .text-sparkle-rainbow {
+        background: linear-gradient(
+          90deg,
+          #ff0000, /* Rouge */
+          #ffd700, /* Or */
+          #ffffff, /* Blanc */
+          #00ffff, /* Cyan */
+          #ff69b4, /* Rose */
+          #ff0000  /* Rouge (boucle) */
+        );
+        background-size: 200% auto;
+        color: #fff;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: rainbow-sparkle 3s linear infinite;
+        text-shadow: 0 0 20px rgba(255,255,255,0.2);
+      }
+
+      /* Stress Shake Animation */
+      @keyframes shake {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        10% { transform: translate(-1px, -2px) rotate(-1deg); }
+        20% { transform: translate(-3px, 0px) rotate(1deg); }
+        30% { transform: translate(3px, 2px) rotate(0deg); }
+        40% { transform: translate(1px, -1px) rotate(1deg); }
+        50% { transform: translate(-1px, 2px) rotate(-1deg); }
+        60% { transform: translate(-3px, 1px) rotate(0deg); }
+        70% { transform: translate(3px, 1px) rotate(-1deg); }
+        80% { transform: translate(-1px, -1px) rotate(1deg); }
+        90% { transform: translate(1px, 2px) rotate(0deg); }
+        100% { transform: translate(1px, -2px) rotate(-1deg); }
+      }
+
+      .animate-shake {
+        animation: shake 0.5s;
+        animation-iteration-count: infinite;
+      }
+
+      /* Pulse Red Alert */
+      @keyframes pulse-red {
+        0%, 100% { box-shadow: 0 0 20px rgba(220, 38, 38, 0); }
+        50% { box-shadow: 0 0 50px rgba(220, 38, 38, 0.5); }
+      }
+
+      .pulse-alert {
+        animation: pulse-red 1s infinite;
+      }
+
+      /* Envelope Styles */
+      .envelope-container {
+        perspective: 1000px;
+      }
+      
+      .envelope {
+        position: relative;
+        width: 300px;
+        height: 200px;
+        background-color: #1f2937; /* Gray-800 */
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease;
+        cursor: pointer;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+      }
+
+      .envelope:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.6);
+      }
+
+      .envelope-flap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        border-top: 110px solid #374151; /* Gray-700 */
+        transform-origin: top;
+        transition: transform 0.6s 0.2s ease, z-index 0.2s;
+        z-index: 3;
+      }
+
+      .envelope.open .envelope-flap {
+        transform: rotateX(180deg);
+        z-index: 0;
+        border-top-color: #4b5563; /* Gray-600 */
+      }
+
+      .envelope-pocket {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        border-bottom: 100px solid #1f2937; /* Gray-800 match body */
+        z-index: 2;
+      }
+      
+      .envelope-pocket-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        border-bottom: 100px solid #374151; /* Gray-700 lighter */
+        z-index: 2;
+        transform: scale(0.98) translateY(-1px); /* Slight border effect */
+      }
+
+      .letter {
+        position: absolute;
+        bottom: 0;
+        left: 15px;
+        width: 270px;
+        height: 180px;
+        background-color: #f3f4f6;
+        padding: 20px;
+        transition: transform 0.6s ease;
+        z-index: 1;
+        display: flex;
+        flex-col: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 -5px 10px rgba(0,0,0,0.1);
+      }
+
+      .envelope.open .letter {
+        transform: translateY(-100px);
+        z-index: 4;
+        transition: transform 0.8s 0.6s ease, z-index 0s 0.6s;
+      }
+
+      .seal {
+        position: absolute;
+        top: 110px; /* Flap tip */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        background-color: #991b1b; /* Red-800 */
+        border-radius: 50%;
+        z-index: 4;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #7f1d1d;
+        transition: opacity 0.4s ease;
+      }
+
+      .envelope.open .seal {
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.575.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
